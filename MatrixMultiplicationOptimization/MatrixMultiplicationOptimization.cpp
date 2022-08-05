@@ -8,29 +8,29 @@ using namespace std;
 
 int main() {
 	clock_t tStart = clock();
-	const int N = 45000;
-	__int8** firstMatrix = new __int8* [N];
+	const int N = 2000;
+	int** firstMatrix = new int* [N];
 	for (int i = 0; i < N; ++i)
-		firstMatrix[i] = new __int8[N];
+		firstMatrix[i] = new int[N];
 
-	__int8** secondMatrix = new __int8* [N];
+	int** secondMatrix = new int* [N];
 	for (int i = 0; i < N; ++i)
-		secondMatrix[i] = new __int8[N];
+		secondMatrix[i] = new int[N];
 
 	for (int y = 0; y < N; y++)
 	{
 		for (int x = 0; x < N; x++)
 		{
-			firstMatrix[y][x] = 5;
-			secondMatrix[y][x] = 6;
+			firstMatrix[y][x] = rand();
+			secondMatrix[y][x] = rand();
 		}
 	}
 	printf("Random number in matrix Time taken: %.2fs\n", (double)(clock() - tStart) / CLOCKS_PER_SEC);
 	tStart = clock();
 
-	__int8** ReverseSecondMatrix = new __int8* [N];
+	int** ReverseSecondMatrix = new int* [N];
 	for (int i = 0; i < N; ++i)
-		ReverseSecondMatrix[i] = new __int8[N];
+		ReverseSecondMatrix[i] = new int[N];
 	for (int y = 0; y < N; y++)
 	{
 		for (int x = 0; x < N; x++)
@@ -45,15 +45,19 @@ int main() {
 	printf("Matrix Reverse Time taken: %.2fs\n", (double)(clock() - tStart) / CLOCKS_PER_SEC);
 	tStart = clock();
 
-	__int8** MultiMatrixMatrix = new __int8* [N];
+	int** MultiMatrixMatrix = new int* [N];
 	for (int i = 0; i < N; ++i)
-		MultiMatrixMatrix[i] = new __int8[N];
+		MultiMatrixMatrix[i] = new int[N];
 
 	for (int y = 0; y < N; y++)
 	{
 		for (int x = 0; x < N; x++)
 		{
-			MultiMatrixMatrix[x][y] = firstMatrix[y][x] * ReverseSecondMatrix[y][x];
+			MultiMatrixMatrix[y][x] = 0;
+			for (int k = 0; k < N; k++)
+			{
+				MultiMatrixMatrix[y][x] = MultiMatrixMatrix[y][x] + firstMatrix[x][k] * ReverseSecondMatrix[x][k];
+			}
 		}
 	}
 	printf("Time taken: %.2fs\n", (double)(clock() - tStart) / CLOCKS_PER_SEC);
@@ -62,15 +66,13 @@ int main() {
 
 /*int main() {
 	clock_t tStart = clock();
-	const int N = 45000;
+	const int N = 2000;
 	__int8** firstMatrix = new __int8* [N];
 	for (int i = 0; i < N; ++i)
 		firstMatrix[i] = new __int8[N];
-
 	__int8** secondMatrix = new __int8* [N];
 	for (int i = 0; i < N; ++i)
 		secondMatrix[i] = new __int8[N];
-
 	for (int y = 0; y < N; y++)
 	{
 		for (int x = 0; x < N; x++)
@@ -81,18 +83,20 @@ int main() {
 	}
 	printf("Random number in matrix Time taken: %.2fs\n", (double)(clock() - tStart) / CLOCKS_PER_SEC);
 	tStart = clock();
-
 	__int8** MultiMatrixMatrix = new __int8* [N];
 	for (int i = 0; i < N; ++i)
 		MultiMatrixMatrix[i] = new __int8[N];
-
 	for (int y = 0; y < N; y++)
 	{
 		for (int x = 0; x < N; x++)
 		{
-			MultiMatrixMatrix[x][y] = firstMatrix[y][x] * secondMatrix[x][y];
+			MultiMatrixMatrix[y][x] = 0;
+			for (int k = 0; k < N; k++)
+			{
+				MultiMatrixMatrix[y][x] = MultiMatrixMatrix[y][x] + firstMatrix[x][k] * secondMatrix[k][x];
+			}
 		}
 	}
 	printf("Time taken: %.2fs\n", (double)(clock() - tStart) / CLOCKS_PER_SEC);
 	return 0;
-}*/
+*/
