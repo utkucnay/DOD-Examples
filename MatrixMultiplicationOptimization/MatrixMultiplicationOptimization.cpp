@@ -2,14 +2,49 @@
 #include <stdio.h>
 #include <iostream>
 #include <time.h>
+#include <thread>
 
 using namespace std;
 
+void RandomGenMatrix(int** firstMatrix, int** secondMatrix, int N, int ThreadID,int threadNumber) {
+	for (int y = N * ThreadID; y <(ThreadID+1) * N / threadNumber; y++)
+	{
+		for (int x = N * ThreadID; x < (ThreadID + 1) * N / threadNumber; x++)
+		{
+			firstMatrix[y][x] = rand();
+			secondMatrix[y][x] = rand();
+		}
+	}
+}
+
+void ReverseMajorMatrix(int** ReverseSecondMatrix, int** secondMatrix, int N, int ThreadID, int threadNumber) {
+	for (int y = N * ThreadID; y < (ThreadID + 1) * N / threadNumber; y++)
+	{
+		for (int x = N * ThreadID; x < (ThreadID + 1) * N / threadNumber; x++)
+		{
+			ReverseSecondMatrix[x][y] = secondMatrix[y][x];
+		}
+	}
+}
+
+void MultiMatrix(int** MultiMatrixMatrix, int** firstMatrix, int** secondMatrix,  int N, int ThreadID, int threadNumber) {
+	for (int y = N * ThreadID; y < (ThreadID + 1) * N / threadNumber; y++)
+	{
+		for (int x = N * ThreadID; x < (ThreadID + 1) * N / threadNumber; x++)
+		{
+			MultiMatrixMatrix[y][x] = 0;
+			for (int k = 0; k < N; k++)
+			{
+				MultiMatrixMatrix[y][x] = MultiMatrixMatrix[y][x] + firstMatrix[x][k] * secondMatrix[x][k];
+			}
+		}
+	}
+}
 
 int main() {
 	clock_t tStart = clock();
-	const int N = 2000;
-	int** firstMatrix = new int* [N];
+	const int N = 2500;
+	int** firstMatrix = new int*[N];
 	for (int i = 0; i < N; ++i)
 		firstMatrix[i] = new int[N];
 
@@ -17,27 +52,31 @@ int main() {
 	for (int i = 0; i < N; ++i)
 		secondMatrix[i] = new int[N];
 
-	for (int y = 0; y < N; y++)
-	{
-		for (int x = 0; x < N; x++)
-		{
-			firstMatrix[y][x] = rand();
-			secondMatrix[y][x] = rand();
-		}
-	}
+	RandomGenMatrix(firstMatrix, secondMatrix, N, 0, 4);
+	thread t1(RandomGenMatrix, firstMatrix, secondMatrix, N, 1, 4);
+	thread t2(RandomGenMatrix, firstMatrix, secondMatrix, N, 2, 4);
+	thread t3(RandomGenMatrix, firstMatrix, secondMatrix, N, 3, 4);
+
+	t1.join();
+	t2.join();
+	t3.join();
+
 	printf("Random number in matrix Time taken: %.2fs\n", (double)(clock() - tStart) / CLOCKS_PER_SEC);
 	tStart = clock();
 
 	int** ReverseSecondMatrix = new int* [N];
 	for (int i = 0; i < N; ++i)
 		ReverseSecondMatrix[i] = new int[N];
-	for (int y = 0; y < N; y++)
-	{
-		for (int x = 0; x < N; x++)
-		{
-			ReverseSecondMatrix[x][y] = secondMatrix[y][x];
-		}
-	}
+	
+	ReverseMajorMatrix(ReverseSecondMatrix, secondMatrix, N, 0, 4);
+	thread t4(ReverseMajorMatrix, ReverseSecondMatrix, secondMatrix, N, 1, 4);
+	thread t5(ReverseMajorMatrix, ReverseSecondMatrix, secondMatrix, N, 2, 4);
+	thread t6(ReverseMajorMatrix, ReverseSecondMatrix, secondMatrix, N, 3, 4);
+
+	t4.join();
+	t5.join();
+	t6.join();
+
 	for (int i = 0; i < N; ++i)
 		delete(secondMatrix[i]);
 	delete(secondMatrix);
@@ -49,30 +88,28 @@ int main() {
 	for (int i = 0; i < N; ++i)
 		MultiMatrixMatrix[i] = new int[N];
 
-	for (int y = 0; y < N; y++)
-	{
-		for (int x = 0; x < N; x++)
-		{
-			MultiMatrixMatrix[y][x] = 0;
-			for (int k = 0; k < N; k++)
-			{
-				MultiMatrixMatrix[y][x] = MultiMatrixMatrix[y][x] + firstMatrix[x][k] * ReverseSecondMatrix[x][k];
-			}
-		}
-	}
+	MultiMatrix(MultiMatrixMatrix, firstMatrix, ReverseSecondMatrix, N, 0, 4);
+	thread t7(MultiMatrix, MultiMatrixMatrix, firstMatrix, ReverseSecondMatrix, N, 1, 4);
+	thread t8(MultiMatrix, MultiMatrixMatrix, firstMatrix, ReverseSecondMatrix, N, 2, 4);
+	thread t9(MultiMatrix, MultiMatrixMatrix, firstMatrix, ReverseSecondMatrix, N, 3, 4);
+
+	t7.join();
+	t8.join();
+	t9.join();
+	
 	printf("Time taken: %.2fs\n", (double)(clock() - tStart) / CLOCKS_PER_SEC);
 	return 0;
 }
 
 /*int main() {
 	clock_t tStart = clock();
-	const int N = 2000;
-	__int8** firstMatrix = new __int8* [N];
+	const int N = 2500;
+	int** firstMatrix = new int*[N];
 	for (int i = 0; i < N; ++i)
-		firstMatrix[i] = new __int8[N];
-	__int8** secondMatrix = new __int8* [N];
+		firstMatrix[i] = new int[N];
+	int** secondMatrix = new int*[N];
 	for (int i = 0; i < N; ++i)
-		secondMatrix[i] = new __int8[N];
+		secondMatrix[i] = new int[N];
 	for (int y = 0; y < N; y++)
 	{
 		for (int x = 0; x < N; x++)
@@ -83,9 +120,9 @@ int main() {
 	}
 	printf("Random number in matrix Time taken: %.2fs\n", (double)(clock() - tStart) / CLOCKS_PER_SEC);
 	tStart = clock();
-	__int8** MultiMatrixMatrix = new __int8* [N];
+	int** MultiMatrixMatrix = new int* [N];
 	for (int i = 0; i < N; ++i)
-		MultiMatrixMatrix[i] = new __int8[N];
+		MultiMatrixMatrix[i] = new int[N];
 	for (int y = 0; y < N; y++)
 	{
 		for (int x = 0; x < N; x++)
@@ -97,6 +134,8 @@ int main() {
 			}
 		}
 	}
+	cout << MultiMatrixMatrix[20][10];
+
 	printf("Time taken: %.2fs\n", (double)(clock() - tStart) / CLOCKS_PER_SEC);
 	return 0;
-*/
+}*/
