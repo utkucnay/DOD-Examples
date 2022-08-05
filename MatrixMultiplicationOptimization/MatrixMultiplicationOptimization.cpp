@@ -53,14 +53,17 @@ int main() {
 		secondMatrix[i] = new int[N];
 
 	RandomGenMatrix(firstMatrix, secondMatrix, N, 0, 4);
-	thread t1(RandomGenMatrix, firstMatrix, secondMatrix, N, 1, 4);
-	thread t2(RandomGenMatrix, firstMatrix, secondMatrix, N, 2, 4);
-	thread t3(RandomGenMatrix, firstMatrix, secondMatrix, N, 3, 4);
+	thread* t1 = new thread(RandomGenMatrix, firstMatrix, secondMatrix, N, 1, 4);
+	thread* t2 = new thread(RandomGenMatrix, firstMatrix, secondMatrix, N, 2, 4);
+	thread* t3 = new thread(RandomGenMatrix, firstMatrix, secondMatrix, N, 3, 4);
 
-	t1.join();
-	t2.join();
-	t3.join();
+	t1->join();
+	t2->join();
+	t3->join();
 
+	delete(t1);
+	delete(t2);
+	delete(t3);
 	printf("Random number in matrix Time taken: %.2fs\n", (double)(clock() - tStart) / CLOCKS_PER_SEC);
 	tStart = clock();
 
@@ -69,13 +72,17 @@ int main() {
 		ReverseSecondMatrix[i] = new int[N];
 	
 	ReverseMajorMatrix(ReverseSecondMatrix, secondMatrix, N, 0, 4);
-	thread t4(ReverseMajorMatrix, ReverseSecondMatrix, secondMatrix, N, 1, 4);
-	thread t5(ReverseMajorMatrix, ReverseSecondMatrix, secondMatrix, N, 2, 4);
-	thread t6(ReverseMajorMatrix, ReverseSecondMatrix, secondMatrix, N, 3, 4);
+	t1 = new thread(ReverseMajorMatrix, ReverseSecondMatrix, secondMatrix, N, 1, 4);
+	t2 = new thread(ReverseMajorMatrix, ReverseSecondMatrix, secondMatrix, N, 2, 4);
+	t3 = new thread(ReverseMajorMatrix, ReverseSecondMatrix, secondMatrix, N, 3, 4);
 
-	t4.join();
-	t5.join();
-	t6.join();
+	t1->join();
+	t2->join();
+	t3->join();
+
+	delete(t1);
+	delete(t2);
+	delete(t3);
 
 	for (int i = 0; i < N; ++i)
 		delete(secondMatrix[i]);
@@ -89,13 +96,17 @@ int main() {
 		MultiMatrixMatrix[i] = new int[N];
 
 	MultiMatrix(MultiMatrixMatrix, firstMatrix, ReverseSecondMatrix, N, 0, 4);
-	thread t7(MultiMatrix, MultiMatrixMatrix, firstMatrix, ReverseSecondMatrix, N, 1, 4);
-	thread t8(MultiMatrix, MultiMatrixMatrix, firstMatrix, ReverseSecondMatrix, N, 2, 4);
-	thread t9(MultiMatrix, MultiMatrixMatrix, firstMatrix, ReverseSecondMatrix, N, 3, 4);
+	t1 = new thread(MultiMatrix, MultiMatrixMatrix, firstMatrix, ReverseSecondMatrix, N, 1, 4);
+	t2 = new thread(MultiMatrix, MultiMatrixMatrix, firstMatrix, ReverseSecondMatrix, N, 2, 4);
+	t3 = new thread(MultiMatrix, MultiMatrixMatrix, firstMatrix, ReverseSecondMatrix, N, 3, 4);
 
-	t7.join();
-	t8.join();
-	t9.join();
+	t1->join();
+	t2->join();
+	t3->join();
+
+	delete(t1);
+	delete(t2);
+	delete(t3);
 	
 	printf("Time taken: %.2fs\n", (double)(clock() - tStart) / CLOCKS_PER_SEC);
 	return 0;
