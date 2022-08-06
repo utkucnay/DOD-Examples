@@ -1,4 +1,4 @@
-# DOD-Example
+# DOD-Examples
 I try to solve code problems
 
 # Matrix Multiplication Optimization
