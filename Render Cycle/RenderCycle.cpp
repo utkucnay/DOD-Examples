@@ -48,6 +48,7 @@ struct MeshData
 	MeshData(int VectorNumber)
 	{
 		Matrix->resize(VectorNumber);
+		UVS->resize(VectorNumber);
 	}
 	vector<VectorData>* Matrix = new vector<VectorData>;
 	vector<UV>* UVS = new vector<UV>;
