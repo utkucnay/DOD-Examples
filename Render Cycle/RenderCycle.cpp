@@ -26,7 +26,7 @@ struct VectorData
 	}
 public:
 	float** Matrix = new float*[4];
-	UV* uv = new UV;
+	
 };
 
 struct Texture
@@ -50,6 +50,7 @@ struct MeshData
 		Matrix->resize(VectorNumber);
 	}
 	vector<VectorData>* Matrix = new vector<VectorData>;
+	vector<UV>* UVS = new vector<UV>;
 	Texture* texture = new Texture(1080, 1920);
 };
 
