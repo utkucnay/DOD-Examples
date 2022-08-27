@@ -6,5 +6,5 @@ matrix multiplication is  Multiply row and column but the column is a problem so
 # 2- OOP vs DOD 
 DOD focuses on the cache line otherwise OOP focuses on Object and proportions so OOP has better change cache miss so OOP decrease performance
 
-# 3- Renderer Cycle
+# 3- Render Cycle
 i simulate game engine render mesh.
