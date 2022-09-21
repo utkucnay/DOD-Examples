@@ -58,10 +58,13 @@ struct MeshData
 void Render(MeshData* meshData) {
 	for (int i = 0; i < meshData->Matrix->size(); i++)
 	{
-		for (int a = 0; a < 2; a++)
-		{
-			meshData->Matrix->at(i).Matrix[0][a] /= meshData->Matrix->at(i).Matrix[0][3];
-		}
+		//We dont scale Mesh renderer
+		meshData->Matrix->at(i).Matrix[0][a] *= meshData->Matrix->at(i).Matrix[0][2];
+		while (meshData->Matrix->at(i).Matrix[0][2] <= 1)
+			for (int a = 0; a < 4; a++)
+			{
+				meshData->Matrix->at(i).Matrix[0][a] /= meshData->Matrix->at(i).Matrix[0][3];
+			}
 	}
 }
 
